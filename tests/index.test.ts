@@ -1,4 +1,4 @@
-import {showLocation} from '../src/index';
+import {ShowLocationOptions, showLocation} from '../src/index';
 import {Linking} from 'react-native';
 
 jest.mock('react-native', () => ({
@@ -17,10 +17,13 @@ describe('showLocation', () => {
   const sourceLongitude = 890;
 
   beforeEach(() => {
-    Linking.openURL.mockClear();
+    (Linking.openURL as jest.Mock).mockClear();
   });
 
-  const verifyThatSettingsLeadToUrl = (settings, url) => {
+  const verifyThatSettingsLeadToUrl = (
+    settings: ShowLocationOptions,
+    url: string,
+  ) => {
     showLocation(settings);
     expect(Linking.openURL).toHaveBeenCalledWith(url);
   };
@@ -422,7 +425,7 @@ describe('showLocation', () => {
           longitude,
           app: 'maps-me',
         },
-        'mapsme://route?sll=undefined,undefined&saddr= &dll=123,234&daddr=null&type=vehicle',
+        'mapsme://route?sll=undefined,undefined&saddr= &dll=123,234&daddr=&type=vehicle',
       );
     });
 
@@ -435,7 +438,7 @@ describe('showLocation', () => {
           sourceLongitude,
           app: 'maps-me',
         },
-        'mapsme://route?sll=567,890&saddr= &dll=123,234&daddr=null&type=vehicle',
+        'mapsme://route?sll=567,890&saddr= &dll=123,234&daddr=&type=vehicle',
       );
     });
   });
